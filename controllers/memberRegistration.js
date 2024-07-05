@@ -1,6 +1,5 @@
 const MemberSchema = require("../models/memberRegistration");
 
-
 const memberRegistration = async (req, res) => {
   const data = req.body;
   const member = new MemberSchema({
@@ -15,7 +14,10 @@ const memberRegistration = async (req, res) => {
       email: result.email,
     });
   } catch (error) {
-    if (error.name === "ValidationError") {
+    if (error.code === 11000) {
+      // error code indicates a duplicate key error
+      res.status(400).json({ message: "Email already exists" });
+    } else if (error.name === "ValidationError") {
       const errors = Object.keys(error.errors).map(
         (key) => error.errors[key].message
       );
