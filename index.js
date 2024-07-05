@@ -5,6 +5,7 @@ const cors = require("cors");
 require("dotenv").config();
 const port = process.env.PORT || process.env.LP;
 const uri = `mongodb+srv://${process.env.USER}:${process.env.PASS}@cluster0.ni8nft9.mongodb.net/${process.env.DB}?retryWrites=true&w=majority&appName=Cluster0`;
+const memberRoute = require("./routes/memberRoute");
 
 //middlewares
 app.use(cors());
@@ -15,6 +16,7 @@ mongoose
   .connect(uri)
   .then(() => {
     //routes
+    app.use("/member", memberRoute);
 
     app.get("/", async (req, res) => {
       res.status(200).json("HOME PAGE");
