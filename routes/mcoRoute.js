@@ -1,8 +1,8 @@
 const express = require("express");
-const mcoRouter = express.Router();
+const mcoRoute = express.Router();
 
-mcoRouter.get("/", (req, res) => {
+mcoRoute.get("/", (req, res) => {
   res.json("mco home");
 });
 
-module.exports = mcoRouter;
+module.exports = mcoRoute;
