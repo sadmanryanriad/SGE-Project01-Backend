@@ -1,21 +1,49 @@
-const MemberSchema = require("../models/memberRegistration");
+const MemberSchema = require("../models/member");
+const { saveUser } = require("./userController");
 
 const memberRegistration = async (req, res) => {
-  const data = req.body;
-  const member = new MemberSchema({
-    ...data,
-  });
+  const {
+    firstName,
+    lastName,
+    email,
+    primaryMobileNumber,
+    whatsappNumber,
+    password,
+  } = req.body;
+
   try {
-    const result = await member.save();
+    // Validate new member data first
+    //It ensures that the member data is validated first before attempting to save user data
+    const newMember = new MemberSchema({
+      firstName,
+      lastName,
+      email,
+      primaryMobileNumber,
+      whatsappNumber,
+      password,
+    });
+    //save member data
+    const savedMember = await newMember.save();
+
+    // Save user data
+    const user = {
+      email: newMember.email,
+      password: newMember.password,
+      role: "member",
+    };
+    //save user data
+    const savedUser = await saveUser(user);
+
     res.status(201).json({
-      message: "member data registered successfully",
-      _id: result._id,
-      role: result.role,
-      email: result.email,
+      message: "Member registered successfully",
+      user: {
+        name: `${firstName} ${lastName}`,
+        email: savedUser.email,
+        role: savedUser.role,
+      },
     });
   } catch (error) {
-    if (error.code === 11000) {
-      // error code indicates a duplicate key error
+    if (error.message === "Email already exists") {
       res.status(400).json({ message: "Email already exists" });
     } else if (error.name === "ValidationError") {
       const errors = Object.keys(error.errors).map(
