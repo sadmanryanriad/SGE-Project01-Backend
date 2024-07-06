@@ -42,6 +42,16 @@ npm start
 ```
 The server will be running on `http://localhost:5000`.
 
+## Authentication and Authorization
+
+### Authentication
+
+To access protected routes, you need to authenticate using a valid token. Use the `authUser` middleware by providing a valid token in the request headers.
+
+### Authorization
+
+Routes are protected based on user roles. Use the `authorizeRole` middleware to restrict access based on roles (`admin`, `mco`, `member`). Only users with the appropriate roles can access specific routes.
+
 ## API Endpoints
 
 ### Member Registration
@@ -67,36 +77,16 @@ The server will be running on `http://localhost:5000`.
 - **201 Created**
   ```json
   {
-    "message": "Member data registered successfully",
-    "_id": "60f8a7e2f44cd455e4e9b5b3",
-    "role": "member",
-    "email": "john.doe@example.com"
+    "message": "Member registered successfully",
+    "user": {
+      "name": "John Doe",
+      "email": "john.doe@example.com",
+      "role": "member"
+    }
   }
   ```
-- **400 Bad Request** (if email already exists)
-  ```json
-  {
-    "message": "Email already exists"
-  }
-  ```
-- **400 Bad Request** (if validation error)
-  ```json
-  {
-    "errors": [
-      "First name is required",
-      "Last name is required",
-      "Email is required",
-      "Primary mobile number is required",
-      "Please enter a password"
-    ]
-  }
-  ```
+- **400 Bad Request** (if email already exists or validation error)
 - **500 Internal Server Error**
-  ```json
-  {
-    "message": "An error occurred"
-  }
-  ```
 
 ### Student Registration
 
@@ -139,30 +129,8 @@ The server will be running on `http://localhost:5000`.
     "files": []
   }
   ```
-- **400 Bad Request** (if email already exists)
-  ```json
-  {
-    "message": "Email already exists"
-  }
-  ```
-- **400 Bad Request** (if validation error)
-  ```json
-  {
-    "errors": [
-      "First name is required",
-      "Last name is required",
-      "Email is required",
-      "Primary mobile number is required",
-      "Member email is required"
-    ]
-  }
-  ```
+- **400 Bad Request** (if email already exists or validation error)
 - **500 Internal Server Error**
-  ```json
-  {
-    "message": "An error occurred"
-  }
-  ```
 
 ## Database Schemas
 
