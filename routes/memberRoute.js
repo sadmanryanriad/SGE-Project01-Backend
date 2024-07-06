@@ -2,15 +2,16 @@ const express = require("express");
 const memberRoute = express.Router();
 const memberRegistration = require("../controllers/memberRegistration");
 const studentRegistration = require("../controllers/studentRegistration");
+const { authUser } = require("../middlewares/auth");
 
 //routes
-memberRoute.get("/", async (req, res) => {
+memberRoute.get("/", authUser, async (req, res) => {
   res.json("member Home");
 });
 
 //member registration
-memberRoute.post("/registration", memberRegistration);
+memberRoute.post("/registration", authUser, memberRegistration);
 //student registration
-memberRoute.post("/student/registration", studentRegistration);
+memberRoute.post("/student/registration", authUser, studentRegistration);
 
 module.exports = memberRoute;
