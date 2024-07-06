@@ -31,11 +31,20 @@ const authUser = async (req, res, next) => {
 const authorizeRole = (roles = []) => {
   return (req, res, next) => {
     const userRole = req.user.role;
+
+    // Admin role has access to all routes
+    if (userRole === "admin") {
+      return next();
+    }
+
+    // Check if the user role is included in the specified roles array
     if (!roles.includes(userRole)) {
       return res
         .status(403)
         .json("You do not have permission to access this resource");
     }
+
+    // If user role is included in specified roles, allow access
     next();
   };
 };
