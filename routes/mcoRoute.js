@@ -1,9 +1,20 @@
 const express = require("express");
 const mcoRoute = express.Router();
-const { authUser } = require("../middlewares/auth");
+const { authUser, authorizeRole } = require("../middlewares/auth");
+const studentStatusUpdate = require("../controllers/studentStatusUpdate");
 
-mcoRoute.get("/", authUser, (req, res) => {
+const mcoRoleOnly = ["mco"];
+
+mcoRoute.get("/", authUser, authorizeRole(mcoRoleOnly), (req, res) => {
   res.json("mco home");
 });
+
+//change student status
+mcoRoute.post(
+  "/update-status/:id",
+  authUser,
+  authorizeRole(mcoRoleOnly),
+  studentStatusUpdate
+);
 
 module.exports = mcoRoute;
