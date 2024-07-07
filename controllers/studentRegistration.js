@@ -9,6 +9,7 @@ const studentRegistration = async (req, res) => {
     whatsappNumber,
     preferredCourse,
     preferredUniversity,
+    createdBy,
   } = req.body;
 
   const newStudent = new StudentSchema({
@@ -19,6 +20,7 @@ const studentRegistration = async (req, res) => {
     whatsappNumber,
     preferredCourse,
     preferredUniversity,
+    createdBy,
   });
 
   try {

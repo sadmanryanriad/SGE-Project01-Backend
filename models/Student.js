@@ -45,6 +45,10 @@ const StudentSchema = new Schema({
     match: [/.+\@.+\..+/, "Member email is not valid"],
   },
   status: {
+    type: String,
+    default: "pending",
+  },
+  statusHistory: {
     type: Array,
   },
   studentId: {
