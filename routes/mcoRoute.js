@@ -3,6 +3,7 @@ const mcoRoute = express.Router();
 const { authUser, authorizeRole } = require("../middlewares/auth");
 const studentStatusUpdate = require("../controllers/studentStatusUpdate");
 const commentsOnStudent = require("../controllers/commentsOnStudent");
+const getAllCommentsOnStudent = require("../controllers/getAllCommentsOnStudent");
 
 const mcoRoleOnly = ["mco"];
 
@@ -24,6 +25,13 @@ mcoRoute.post(
   authUser,
   authorizeRole(["mco", "member"]),
   commentsOnStudent
+);
+//get all comments of a student by id
+mcoRoute.get(
+  "/comments/:id",
+  authUser,
+  authorizeRole(["mco", "member"]),
+  getAllCommentsOnStudent
 );
 
 module.exports = mcoRoute;
