@@ -3,6 +3,7 @@ const memberRoute = express.Router();
 const memberRegistration = require("../controllers/memberRegistration");
 const studentRegistration = require("../controllers/studentRegistration");
 const { authUser, authorizeRole } = require("../middlewares/auth");
+const getAllStudents = require("../controllers/getAllStudents");
 
 //routes
 memberRoute.get("/", authorizeRole(["member"]), async (req, res) => {
@@ -21,6 +22,13 @@ memberRoute.post(
   authUser,
   authorizeRole(["member"]),
   studentRegistration
+);
+//get all students
+memberRoute.get(
+  "/students",
+  authUser,
+  authorizeRole(["member", "mco"]),
+  getAllStudents
 );
 
 module.exports = memberRoute;
