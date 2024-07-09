@@ -8,6 +8,21 @@ const fileUploadController = async (req, res) => {
   }
 
   try {
+    // Check student status first
+    const statusResult = await Student.findById(req.params.studentId).select(
+      "status"
+    );
+
+    if (!statusResult) {
+      return res.status(404).json({ error: "Student not found" });
+    }
+
+    if (statusResult.status !== "status-2") {
+      return res.status(403).json({
+        error: "File upload not allowed for this status!",
+      });
+    }
+
     const result = await cloudinary.uploader.upload(req.file.path, {
       resource_type: "raw",
       folder: "project-01",
