@@ -15,7 +15,7 @@ memberRoute.get("/", authorizeRole(["member"]), async (req, res) => {
 memberRoute.post("/registration", memberRegistration);
 //student registration
 memberRoute.post(
-  "/student/registration",
+  "/student-registration",
   authUser,
   authorizeRole(["member"]),
   studentRegistration

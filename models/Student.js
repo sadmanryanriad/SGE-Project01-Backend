@@ -46,7 +46,11 @@ const StudentSchema = new Schema({
   },
   status: {
     type: String,
-    default: "pending",
+    default: "application processing",
+  },
+  canUpload: {
+    type: Boolean,
+    default: false,
   },
   statusHistory: {
     type: Array,

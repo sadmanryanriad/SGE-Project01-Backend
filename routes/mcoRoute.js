@@ -15,7 +15,7 @@ mcoRoute.get("/", authUser, authorizeRole(mcoRoleOnly), (req, res) => {
 
 //change student status
 mcoRoute.post(
-  "/update-status/:id",
+  "/change-status/:id",
   authUser,
   authorizeRole(mcoRoleOnly),
   studentStatusUpdate
