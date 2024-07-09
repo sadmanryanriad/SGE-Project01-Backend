@@ -12,11 +12,7 @@ memberRoute.get("/", authorizeRole(["member"]), async (req, res) => {
 });
 
 //member registration
-memberRoute.post(
-  "/registration",
-  authorizeRole(["member"]),
-  memberRegistration
-);
+memberRoute.post("/registration", memberRegistration);
 //student registration
 memberRoute.post(
   "/student/registration",
