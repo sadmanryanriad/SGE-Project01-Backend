@@ -1,6 +1,20 @@
 const mongoose = require("mongoose");
 const { Schema } = mongoose;
 
+const StatusSchema = new Schema({
+  status: {
+    type: String,
+    default: "application processing",
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now,
+  },
+  comment: {
+    type: String,
+  },
+});
+
 const StudentSchema = new Schema({
   firstName: {
     type: String,
@@ -45,8 +59,8 @@ const StudentSchema = new Schema({
     match: [/.+\@.+\..+/, "Member email is not valid"],
   },
   status: {
-    type: String,
-    default: "application processing",
+    type: StatusSchema,
+    default: () => ({ status: "application processing" }),
   },
   canUpload: {
     type: Boolean,

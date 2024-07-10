@@ -5,9 +5,14 @@ const canUploadStatuses = require("../others/canUploadStatuses");
 const studentStatusUpdate = async (req, res) => {
   try {
     const id = req.params.id;
-    const newStatus = req.body.status;
+    const { status, comment } = req.body;
+    const newStatus = {
+      status,
+      comment: comment || "",
+      createdAt: new Date(),
+    };
 
-    if (!allowedStatuses.includes(newStatus)) {
+    if (!allowedStatuses.includes(newStatus.status)) {
       return res.status(400).json({ error: "Invalid status" });
     }
 
@@ -17,12 +22,12 @@ const studentStatusUpdate = async (req, res) => {
       return res.status(404).json("student not found");
     }
     //check if the new status is same as the current status
-    if (student.status === newStatus) {
+    if (student.status.status === newStatus.status) {
       return res.status(400).json("New status is same as the current status");
     }
     //check if eligible for uploading files
     let newCanUpload = false;
-    if (canUploadStatuses.includes(newStatus)) {
+    if (canUploadStatuses.includes(newStatus.status)) {
       newCanUpload = true;
     }
 
