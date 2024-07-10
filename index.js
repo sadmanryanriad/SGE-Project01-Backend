@@ -11,7 +11,12 @@ const signUp = require("./controllers/signUp");
 const login = require("./controllers/login");
 
 //middlewares
-app.use(cors());
+// Allow requests from specific origin and support credentials
+const corsOptions = {
+  origin: ["http://localhost:5173"],
+  credentials: true,
+};
+app.use(cors(corsOptions));
 app.use(express.json());
 
 //database connection

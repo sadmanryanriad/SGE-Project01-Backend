@@ -1,8 +1,7 @@
 const User = require("../models/user");
 
 const authUser = async (req, res, next) => {
-  const userEmail = req.headers["token"];
-
+  const userEmail = req.headers["authorization"].split(" ")[1];
   if (!userEmail) {
     return res.status(403).json("No user provided");
   }

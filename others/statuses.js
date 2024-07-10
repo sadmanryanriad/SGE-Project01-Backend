@@ -12,6 +12,8 @@ const allowedStatuses = [
   "session expired",
   "doc received",
   "partial payment",
+  "enrollment",
+  "dropout",
 ];
 
 module.exports = allowedStatuses;
