@@ -4,7 +4,7 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 require("dotenv").config();
 const port = process.env.PORT || 5000;
-const uri = `mongodb+srv://${process.env.USER}:${process.env.PASS}@cluster0.ni8nft9.mongodb.net/${process.env.DB}?retryWrites=true&w=majority&appName=Cluster0`;
+const uri = `mongodb+srv://${process.env.USER}:${process.env.PASS}@cluster0.yv9dii9.mongodb.net/${process.env.DB}?retryWrites=true&w=majority&appName=Cluster0`;
 const memberRoute = require("./routes/memberRoute");
 const mcoRoute = require("./routes/mcoRoute");
 const signUp = require("./controllers/signUp");
