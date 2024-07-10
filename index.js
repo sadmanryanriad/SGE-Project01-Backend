@@ -9,6 +9,7 @@ const memberRoute = require("./routes/memberRoute");
 const mcoRoute = require("./routes/mcoRoute");
 const signUp = require("./controllers/signUp");
 const login = require("./controllers/login");
+const getRole = require("./controllers/getRole");
 
 //middlewares
 // Allow requests from specific origin and support credentials
@@ -32,6 +33,7 @@ mongoose
     });
     app.get("/signup", signUp);
     app.get("/login", login);
+    app.get("/role/:email", getRole);
 
     app.listen(port, () => {
       console.log(`Connected to database and listening on port: ${port}`);
