@@ -1,6 +1,7 @@
 const Student = require("../models/Student");
 const allowedStatuses = require("../others/statuses");
 const canUploadStatuses = require("../others/canUploadStatuses");
+const sendEmail = require("../others/sendEmail");
 
 const studentStatusUpdate = async (req, res) => {
   try {
@@ -48,6 +49,16 @@ const studentStatusUpdate = async (req, res) => {
       canUpload: result.canUpload,
       statusHistory: result.statusHistory,
     });
+
+    // Send email notifications asynchronously
+    const emailSubject = `Status Update for ${student.firstName} ${student.lastName}`;
+    const emailText = `Dear ${student.firstName},\n\nYour status has been updated to: ${newStatus.status}.\n\nComment: ${newStatus.comment}\n\nBest regards,\nYour Team`;
+
+    // Email to student
+    sendEmail(student.email, emailSubject, emailText).catch(console.error);
+
+    // Email to member who created the student
+    sendEmail(student.createdBy, emailSubject, emailText).catch(console.error);
   } catch (error) {
     console.log(error);
     res.status(500).json("Internal server error");

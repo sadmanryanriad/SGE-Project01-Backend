@@ -1,4 +1,4 @@
-const sendMail = require("../others/mailer");
+const sendMail = require("../others/sendEmail");
 
 const login = async (req, res) => {
   const { email, username = "" } = req.body;
