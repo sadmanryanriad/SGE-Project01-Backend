@@ -12,8 +12,15 @@ const memberRegistration = async (req, res) => {
   } = req.body;
 
   try {
-    // Validate new member data first
-    //It ensures that the member data is validated first before attempting to save user data
+    // Save user data first
+    const user = {
+      email,
+      password,
+      role: "member",
+    };
+    const savedUser = await saveUser(user);
+
+    // Save member data
     const newMember = new MemberSchema({
       firstName,
       lastName,
@@ -22,17 +29,7 @@ const memberRegistration = async (req, res) => {
       whatsappNumber,
       password,
     });
-    //save member data
     const savedMember = await newMember.save();
-
-    // Save user data
-    const user = {
-      email: newMember.email,
-      password: newMember.password,
-      role: "member",
-    };
-    //save user data
-    const savedUser = await saveUser(user);
 
     res.status(201).json({
       message: "Member registered successfully",
@@ -43,7 +40,14 @@ const memberRegistration = async (req, res) => {
       },
     });
   } catch (error) {
+    // Handle the duplicate email error
     if (error.message === "Email already exists") {
+      res.status(400).json({ message: "Email already exists" });
+    } else if (
+      error.code === 11000 &&
+      error.keyPattern &&
+      error.keyPattern.email
+    ) {
       res.status(400).json({ message: "Email already exists" });
     } else if (error.name === "ValidationError") {
       const errors = Object.keys(error.errors).map(
