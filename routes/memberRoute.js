@@ -4,6 +4,7 @@ const memberRegistration = require("../controllers/memberRegistration");
 const studentRegistration = require("../controllers/studentRegistration");
 const { authUser, authorizeRole } = require("../middlewares/auth");
 const getStudentById = require("../controllers/getStudentById");
+const myStudents = require("../controllers/myStudents");
 
 //routes
 memberRoute.get("/", authorizeRole(["member"]), async (req, res) => {
@@ -18,6 +19,14 @@ memberRoute.post(
   authUser,
   authorizeRole(["member"]),
   studentRegistration
+);
+
+//get all students created by the member
+memberRoute.get(
+  "/my-students",
+  authUser,
+  authorizeRole(["member"]),
+  myStudents
 );
 
 //get student by id
