@@ -7,6 +7,7 @@ const addComment = require("../controllers/addComment");
 const upload = require("../others/multer.config");
 const fileUploadController = require("../controllers/fileUploadController");
 const getAllStudents = require("../controllers/getAllStudents");
+const getStudentById = require("../controllers/getStudentById");
 
 const mcoRoleOnly = ["mco"];
 
@@ -16,6 +17,14 @@ mcoRoute.get("/", authUser, authorizeRole(mcoRoleOnly), (req, res) => {
 
 //get all students
 mcoRoute.get("/students", authUser, authorizeRole(["mco"]), getAllStudents);
+
+//get student by id
+mcoRoute.get(
+  "/student/:id",
+  authUser,
+  authorizeRole(["member", "mco"]),
+  getStudentById
+);
 
 //change student status
 mcoRoute.post(
