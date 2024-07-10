@@ -1,6 +1,8 @@
 const StudentSchema = require("../models/Student");
 
 const studentRegistration = async (req, res) => {
+  //check who is requesting from req
+  const createdBy = req.user.email;
   const {
     firstName,
     lastName,
@@ -9,7 +11,6 @@ const studentRegistration = async (req, res) => {
     whatsappNumber,
     preferredCourse,
     preferredUniversity,
-    createdBy,
   } = req.body;
 
   const newStudent = new StudentSchema({
