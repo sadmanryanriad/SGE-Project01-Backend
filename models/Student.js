@@ -1,6 +1,8 @@
 const mongoose = require("mongoose");
 const { Schema } = mongoose;
 
+const newDate = new Date();
+
 const StatusSchema = new Schema({
   status: {
     type: String,
@@ -8,7 +10,7 @@ const StatusSchema = new Schema({
   },
   createdAt: {
     type: Date,
-    default: Date.now,
+    default: newDate,
   },
   comment: {
     type: String,
@@ -68,6 +70,11 @@ const StudentSchema = new Schema({
   },
   statusHistory: {
     type: Array,
+    default: {
+      status: "application processing",
+      createdAt: newDate,
+      comment: "application processing",
+    },
   },
   studentId: {
     type: String,
@@ -80,6 +87,13 @@ const StudentSchema = new Schema({
   },
   files: {
     type: Array,
+  },
+  enrollmentStartDate: {
+    type: Date,
+  },
+  paymentStatus: {
+    type: String,
+    default: "unpaid",
   },
 });
 
