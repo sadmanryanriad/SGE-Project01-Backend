@@ -35,12 +35,7 @@ mcoRoute.post(
 );
 
 //comment on student
-mcoRoute.post(
-  "/comments/:id",
-  authUser,
-  authorizeRole(["mco", "member"]),
-  addComment
-);
+mcoRoute.post("/comments/:id", authUser, authorizeRole(["mco"]), addComment);
 //get all comments of a student by id
 mcoRoute.get(
   "/comments/:id",
