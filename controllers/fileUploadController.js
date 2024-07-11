@@ -1,6 +1,7 @@
 const cloudinary = require("../config/cloudinaryConfig");
 const fs = require("fs");
 const Student = require("../models/Student");
+const canUploadStatuses = require("../others/canUploadStatuses");
 
 const fileUploadController = async (req, res) => {
   if (!req.file) {
@@ -17,7 +18,7 @@ const fileUploadController = async (req, res) => {
       return res.status(404).json({ error: "Student not found" });
     }
 
-    if (statusResult.status !== "status-2") {
+    if (canUploadStatuses.includes(statusResult.status)) {
       return res.status(403).json({
         error: "File upload not allowed for this status!",
       });
