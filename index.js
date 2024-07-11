@@ -32,7 +32,7 @@ mongoose
       res.status(200).json("HOME PAGE");
     });
     app.get("/signup", signUp);
-    app.get("/login", login);
+    app.post("/login", login);
     app.get("/role/:email", getRole);
 
     app.listen(port, () => {

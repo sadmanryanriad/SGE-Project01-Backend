@@ -2,6 +2,7 @@ const sendMail = require("../others/sendEmail");
 
 const login = async (req, res) => {
   const { email, username = "" } = req.body;
+  console.log(email, username);
   // login logic pore dibo ...
 
   //send email to the user
