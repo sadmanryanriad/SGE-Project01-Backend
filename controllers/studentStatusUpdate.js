@@ -3,6 +3,7 @@ const allowedStatuses = require("../others/statuses");
 const canUploadStatuses = require("../others/canUploadStatuses");
 const { scheduleJob, cancelJob } = require("../others/paymentScheduler");
 const sendEmail = require("../others/sendEmail");
+const Member = require("../models/member");
 
 const studentStatusUpdate = async (req, res) => {
   try {
@@ -39,15 +40,34 @@ const studentStatusUpdate = async (req, res) => {
       canUpload: newCanUpload,
     };
 
+    //enrollment starts the timer and adds the enrollment id to the members property enrolledStudents
     if (newStatus.status === "enrollment") {
       update.enrollmentStartDate = new Date();
-      // scheduleJob(id, 90 * 24 * 60 * 60 * 1000); // 90 days (do this later if needed)
       scheduleJob(id);
+
+      //add enrollment data to the member
+      await Member.findOneAndUpdate(
+        { email: student.createdBy },
+        { $push: { enrolledStudents: student._id } }
+      );
     }
 
     if (newStatus.status === "dropout") {
       update.paymentStatus = "cancelled";
       cancelJob(id);
+
+      // Remove student ID from the enrolledStudents array in Member
+      const member = await Member.findOne({ email: student.createdBy });
+      if (member) {
+        const updatedEnrolledStudents = member.enrolledStudents.filter(
+          (enrolledId) => enrolledId.toString() !== student._id.toString()
+        );
+        await Member.findByIdAndUpdate(
+          member._id,
+          { enrolledStudents: updatedEnrolledStudents },
+          { new: true }
+        );
+      }
     }
 
     const options = { new: true };

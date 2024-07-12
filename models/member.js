@@ -45,6 +45,9 @@ const memberRegistrationSchema = new Schema({
   studentAdded: {
     type: Array,
   },
+  enrolledStudents: {
+    type: Array,
+  },
 });
 
 const MemberRegistration = mongoose.model("member", memberRegistrationSchema);
