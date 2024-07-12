@@ -9,6 +9,7 @@ const fileUploadController = require("../controllers/fileUploadController");
 const getAllStudents = require("../controllers/getAllStudents");
 const getStudentById = require("../controllers/getStudentById");
 const addUniversityComment = require("../controllers/addUniversityComment");
+const getAllUniversityCommunication = require("../controllers/getAllUniversityCommunication");
 
 const mcoRoleOnly = ["mco"];
 
@@ -63,6 +64,14 @@ mcoRoute.post(
   authUser,
   authorizeRole(mcoRoleOnly),
   addUniversityComment
+);
+
+//get all university communication
+mcoRoute.get(
+  "/university-communication/:studentId",
+  authUser,
+  authorizeRole(mcoRoleOnly),
+  getAllUniversityCommunication
 );
 
 module.exports = mcoRoute;
