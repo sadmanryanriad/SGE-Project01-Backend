@@ -5,6 +5,7 @@ const studentRegistration = require("../controllers/studentRegistration");
 const { authUser, authorizeRole } = require("../middlewares/auth");
 const getStudentById = require("../controllers/getStudentById");
 const myStudents = require("../controllers/myStudents");
+const getEnrolledStudents = require("../controllers/getEnrolledStudents");
 
 //routes
 memberRoute.get("/", authorizeRole(["member"]), async (req, res) => {
@@ -35,6 +36,13 @@ memberRoute.get(
   authUser,
   authorizeRole(["member", "mco"]),
   getStudentById
+);
+//get Enrolled students
+memberRoute.get(
+  "/enrolled/:email",
+  authUser,
+  authorizeRole(["member", "mco"]),
+  getEnrolledStudents
 );
 
 module.exports = memberRoute;
