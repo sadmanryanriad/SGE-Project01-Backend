@@ -1,5 +1,6 @@
 const MemberSchema = require("../models/member");
 const { saveUser } = require("./userController");
+const sendEmail = require("../others/sendEmail");
 
 const memberRegistration = async (req, res) => {
   const {
@@ -39,6 +40,13 @@ const memberRegistration = async (req, res) => {
         role: savedUser.role,
       },
     });
+    // Send email notifications asynchronously
+    const emailSubject = "Welcome to Shabuj Global Education";
+    const emailText =
+      `Dear  ${firstName} ${lastName}\n\n` +
+      `You are now a member.\n\n` +
+      `You can login to your dashboard.\n\n`;
+    sendEmail(email, emailSubject, emailText).catch(console.error);
   } catch (error) {
     // Handle the duplicate email error
     if (error.message === "Email already exists") {
