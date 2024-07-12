@@ -1,7 +1,13 @@
 const User = require("../models/user");
 
 const authUser = async (req, res, next) => {
-  const userEmail = req.headers["authorization"].split(" ")[1];
+  let userEmail;
+  try {
+    userEmail = req.headers["authorization"].split(" ")[1];
+  } catch (error) {
+    return res.status(403).json("Need valid user");
+  }
+
   if (!userEmail) {
     return res.status(403).json("No user provided");
   }
