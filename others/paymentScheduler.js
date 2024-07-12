@@ -28,7 +28,9 @@ const scheduleJob = (studentId, delay) => {
         (new Date() - new Date(student.enrollmentStartDate)) / 1000; //milliseconds to seconds
       if (secondsSinceEnrollment >= 15) {
         // 15 seconds for testing
-        await Student.findByIdAndUpdate(studentId, { paymentStatus: "paid" });
+        await Student.findByIdAndUpdate(studentId, {
+          paymentStatus: "to be paid",
+        });
         job.stop();
         delete jobs[studentId];
       }

@@ -41,8 +41,8 @@ const studentStatusUpdate = async (req, res) => {
 
     if (newStatus.status === "enrollment") {
       update.enrollmentStartDate = new Date();
-      // scheduleJob(id, 90 * 24 * 60 * 60 * 1000); // 90 days
-      scheduleJob(id, 100 * 1000); // seconds
+      // scheduleJob(id, 90 * 24 * 60 * 60 * 1000); // 90 days (do this later if needed)
+      scheduleJob(id);
     }
 
     if (newStatus.status === "dropout") {
@@ -59,15 +59,15 @@ const studentStatusUpdate = async (req, res) => {
       canUpload: result.canUpload,
       statusHistory: result.statusHistory,
     });
-        // Send email notifications asynchronously
-        const emailSubject = `Status Update for ${student.firstName} ${student.lastName}`;
-        const emailText = `Dear ${student.firstName},\n\nYour status has been updated to: ${newStatus.status}.\n\nComment: ${newStatus.comment}\n\nBest regards,\nYour Team`;
-    
-        // Email to student
-        sendEmail(student.email, emailSubject, emailText).catch(console.error);
-    
-        // Email to member who created the student
-        sendEmail(student.createdBy, emailSubject, emailText).catch(console.error);
+    // Send email notifications asynchronously
+    const emailSubject = `Status Update for ${student.firstName} ${student.lastName}`;
+    const emailText = `Dear ${student.firstName},\n\nYour status has been updated to: ${newStatus.status}.\n\nComment: ${newStatus.comment}\n\nBest regards,\nYour Team`;
+
+    // Email to student
+    sendEmail(student.email, emailSubject, emailText).catch(console.error);
+
+    // Email to member who created the student
+    sendEmail(student.createdBy, emailSubject, emailText).catch(console.error);
   } catch (error) {
     console.log(error);
     res.status(500).json("Internal server error");
