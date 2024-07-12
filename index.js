@@ -14,7 +14,7 @@ const getRole = require("./controllers/getRole");
 //middlewares
 // Allow requests from specific origin and support credentials
 const corsOptions = {
-  origin: ["http://localhost:5173"],
+  origin: ["http://localhost:5173", "https://sge-project01.web.app/"],
   credentials: true,
 };
 app.use(cors(corsOptions));
