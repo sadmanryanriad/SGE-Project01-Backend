@@ -8,6 +8,7 @@ const upload = require("../others/multer.config");
 const fileUploadController = require("../controllers/fileUploadController");
 const getAllStudents = require("../controllers/getAllStudents");
 const getStudentById = require("../controllers/getStudentById");
+const addUniversityComment = require("../controllers/addUniversityComment");
 
 const mcoRoleOnly = ["mco"];
 
@@ -54,6 +55,14 @@ mcoRoute.post(
   "/upload/:studentId",
   upload.single("file"),
   fileUploadController
+);
+
+// university communication
+mcoRoute.post(
+  "/university-communication/:studentId",
+  authUser,
+  authorizeRole(mcoRoleOnly),
+  addUniversityComment
 );
 
 module.exports = mcoRoute;
