@@ -10,6 +10,7 @@ const mcoRoute = require("./routes/mcoRoute");
 const signUp = require("./controllers/signUp");
 const login = require("./controllers/login");
 const getRole = require("./controllers/getRole");
+const str = require("./uploads/upload");
 
 //middlewares
 // Allow requests from specific origin and support credentials
