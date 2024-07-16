@@ -22,8 +22,7 @@ const MCO = new Schema({
   },
   role: {
     type: String,
-    // enum: ["admin", "mco", "member"],
-    default: "member",
+    default: "mco",
   },
   createdAt: {
     type: Date,
