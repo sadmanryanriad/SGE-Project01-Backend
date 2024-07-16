@@ -1,4 +1,7 @@
 const Student = require("../models/Student");
+const Member = require("../models/member");
+const MCO = require("../models/MCO");
+const sendEmail = require("../others/sendEmail");
 
 const assignStudentToMCO = async (req, res) => {
   try {
@@ -21,6 +24,34 @@ const assignStudentToMCO = async (req, res) => {
       message: "assigned successfully",
       result,
     });
+
+    //send email to student and member
+
+    //GET mco name
+    let MCOname;
+    const mco = await MCO.findOne({ email: assignedTo });
+    if (mco) {
+      MCOname = `${mco.firstName} ${mco.lastName}`;
+    } else {
+      console.log("Mco not found");
+      MCOname = "";
+    }
+
+    // Get member email
+    const member = await Member.findOne({ email: result.createdBy });
+    if (!member) {
+      console.log("Member not found");
+      return;
+    }
+    const emailSubject = `Student Assigned to MCO`;
+    const emailTextStudent = `Dear ${result.firstName},\n\nYou have been assigned to an MCO: ${MCOname}.\n\n MCO email: ${assignedTo} \n\nBest regards,\nYour Team`;
+    const emailTextMember = `Dear ${member.firstName},\n\nYour student ${result.firstName} has been assigned to an MCO: ${MCOname}.\n\n MCO email: ${assignedTo} \n\nBest regards,\nYour Team`;
+
+    // Send email notifications asynchronously
+    sendEmail(result.email, emailSubject, emailTextStudent).catch(
+      console.error
+    );
+    sendEmail(member.email, emailSubject, emailTextMember).catch(console.error);
   } catch (error) {
     console.log(error);
     res.status(500).json("Internal Server Error ");
