@@ -95,6 +95,10 @@ const StudentSchema = new Schema({
     type: String,
     default: "unpaid",
   },
+  assignedTo: {
+    type: String,
+    default: "Not Assigned",
+  },
 });
 
 const Student = mongoose.model("Student", StudentSchema);
