@@ -10,6 +10,7 @@ const getAllStudents = require("../controllers/getAllStudents");
 const getStudentById = require("../controllers/getStudentById");
 const addUniversityComment = require("../controllers/addUniversityComment");
 const getAllUniversityCommunication = require("../controllers/getAllUniversityCommunication");
+const getStudentsAssignedToMCO = require("../controllers/getStudentsAssignedToMCO");
 
 const mcoRoleOnly = ["mco"];
 
@@ -17,8 +18,13 @@ mcoRoute.get("/", authUser, authorizeRole(mcoRoleOnly), (req, res) => {
   res.json("mco home");
 });
 
-//get all students
-mcoRoute.get("/students", authUser, authorizeRole(["mco"]), getAllStudents);
+//get student that is assigned to the mco
+mcoRoute.get(
+  "/students",
+  authUser,
+  authorizeRole(["mco"]),
+  getStudentsAssignedToMCO
+);
 
 //get student by id
 mcoRoute.get(
