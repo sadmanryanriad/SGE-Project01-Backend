@@ -6,6 +6,7 @@ const createMCO = require("../controllers/createMCO");
 const getAllMCO = require("../controllers/getAllMCO");
 const assignStudentToMCO = require("../controllers/assignStudentToMCO");
 const getAllMember = require("../controllers/getAllMember");
+const getMemberByEmail = require("../controllers/getMemberByEmail");
 
 adminRoute.get("/", authUser, authorizeRole(["admin"]), async (req, res) =>
   res.json("admin home")
@@ -34,7 +35,14 @@ adminRoute.post(
 );
 
 //get all members
-//get all MCO
 adminRoute.get("/all-member", authUser, authorizeRole(["admin"]), getAllMember);
+
+//get a member by email
+adminRoute.get(
+  "/member/:memberEmail",
+  authUser,
+  authorizeRole(["admin"]),
+  getMemberByEmail
+);
 
 module.exports = adminRoute;
