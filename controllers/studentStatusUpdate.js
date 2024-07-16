@@ -40,20 +40,13 @@ const studentStatusUpdate = async (req, res) => {
       canUpload: newCanUpload,
     };
 
-    //enrollment starts the timer and adds the enrollment id to the members property enrolledStudents
+    //enrollment starts the timer and adds the enrollment id to the members property enrolledStudents when finished
+    //otherwise change the paymentStatus to pending and remove enrollment id from the members property enrolledStudents
     if (newStatus.status === "enrollment") {
       update.enrollmentStartDate = new Date();
       scheduleJob(id);
-
-      //add enrollment data to the member
-      await Member.findOneAndUpdate(
-        { email: student.createdBy },
-        { $push: { enrolledStudents: student._id } }
-      );
-    }
-
-    if (newStatus.status === "dropout") {
-      update.paymentStatus = "cancelled";
+    } else {
+      update.paymentStatus = "pending";
       cancelJob(id);
 
       // Remove student ID from the enrolledStudents array in Member
@@ -70,6 +63,11 @@ const studentStatusUpdate = async (req, res) => {
       }
     }
 
+    if (newStatus.status === "dropout") {
+      update.paymentStatus = "cancelled";
+      cancelJob(id);
+    }
+
     const options = { new: true };
     const result = await Student.findOneAndUpdate(filter, update, options);
 
@@ -83,11 +81,11 @@ const studentStatusUpdate = async (req, res) => {
     const emailSubject = `Status Update for ${student.firstName} ${student.lastName}`;
     const emailText = `Dear ${student.firstName},\n\nYour status has been updated to: ${newStatus.status}.\n\nComment: ${newStatus.comment}\n\nBest regards,\nYour Team`;
 
-    // Email to student
-    sendEmail(student.email, emailSubject, emailText).catch(console.error);
+    // // Email to student
+    // sendEmail(student.email, emailSubject, emailText).catch(console.error);
 
-    // Email to member who created the student
-    sendEmail(student.createdBy, emailSubject, emailText).catch(console.error);
+    // // Email to member who created the student
+    // sendEmail(student.createdBy, emailSubject, emailText).catch(console.error);
   } catch (error) {
     console.log(error);
     res.status(500).json("Internal server error");

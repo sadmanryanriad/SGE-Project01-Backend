@@ -93,7 +93,7 @@ const StudentSchema = new Schema({
   },
   paymentStatus: {
     type: String,
-    default: "unpaid",
+    default: "pending",
   },
   assignedTo: {
     type: String,

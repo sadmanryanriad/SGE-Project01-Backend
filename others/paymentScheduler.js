@@ -1,5 +1,6 @@
 const cron = require("node-cron");
 const Student = require("../models/Student");
+const Member = require("../models/member");
 
 const jobs = {};
 
@@ -9,6 +10,7 @@ const scheduleJob = (studentId, delay) => {
     if (student && student.status.status === "enrollment") {
       const secondsSinceEnrollment =
         (new Date() - new Date(student.enrollmentStartDate)) / 1000; //milliseconds to seconds
+      // console.log(secondsSinceEnrollment);
       if (secondsSinceEnrollment >= 15) {
         // 15 seconds for testing
         const currentStudent = await Student.findById(studentId);
@@ -19,6 +21,12 @@ const scheduleJob = (studentId, delay) => {
         }
         job.stop();
         delete jobs[studentId];
+        //add enrollment data to the member
+        const rr = await Member.findOneAndUpdate(
+          { email: student.createdBy },
+          { $push: { enrolledStudents: student._id } }
+        );
+        console.log("enrollment added to member");
       }
     }
   });
