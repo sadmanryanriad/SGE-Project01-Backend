@@ -6,6 +6,7 @@ const { authUser, authorizeRole } = require("../middlewares/auth");
 const getStudentById = require("../controllers/getStudentById");
 const myStudents = require("../controllers/myStudents");
 const getEnrolledStudents = require("../controllers/getEnrolledStudents");
+const getEnrolledStudentsCount = require("../controllers/getEnrolledStudentsCount");
 
 //routes
 memberRoute.get("/", authorizeRole(["member"]), async (req, res) => {
@@ -44,5 +45,8 @@ memberRoute.get(
   authorizeRole(["member", "mco"]),
   getEnrolledStudents
 );
+
+//get enrolled student count
+memberRoute.get("/enrolled-count", authUser, getEnrolledStudentsCount);
 
 module.exports = memberRoute;
