@@ -1,16 +1,9 @@
-const MemberSchema = require("../models/member");
+const MCO = require("../models/MCO");
 const { saveUser } = require("./userController");
 const sendEmail = require("../others/sendEmail");
 
-const memberRegistration = async (req, res) => {
-  const {
-    firstName,
-    lastName,
-    email,
-    primaryMobileNumber,
-    whatsappNumber,
-    password,
-  } = req.body;
+const MCORegistration = async (req, res) => {
+  const { firstName, lastName, email, password } = req.body;
 
   try {
     // Save user data first
@@ -19,23 +12,22 @@ const memberRegistration = async (req, res) => {
       lastName,
       email,
       password,
-      role: "member",
+      role: "mco",
     };
     const savedUser = await saveUser(user);
 
-    // Save member data
-    const newMember = new MemberSchema({
+    // Save MCO data
+    const newMCO = new MCO({
       firstName,
       lastName,
       email,
-      primaryMobileNumber,
-      whatsappNumber,
-      password,
     });
-    const savedMember = await newMember.save();
+    const savedMCO = await newMCO.save();
+
+    if (!savedMCO) res.status(500).json("Internal server error");
 
     res.status(201).json({
-      message: "Member registered successfully",
+      message: "MCO registered successfully",
       user: {
         name: `${firstName} ${lastName}`,
         email: savedUser.email,
@@ -46,7 +38,7 @@ const memberRegistration = async (req, res) => {
     const emailSubject = "Welcome to Shabuj Global Education";
     const emailText =
       `Dear  ${firstName} ${lastName}\n\n` +
-      `You are now a member.\n\n` +
+      `You are now a MCO.\n\n` +
       `You can login to your dashboard.\n\n`;
     sendEmail(email, emailSubject, emailText).catch(console.error);
   } catch (error) {
@@ -70,4 +62,4 @@ const memberRegistration = async (req, res) => {
   }
 };
 
-module.exports = memberRegistration;
+module.exports = MCORegistration;

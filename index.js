@@ -10,6 +10,7 @@ const mcoRoute = require("./routes/mcoRoute");
 const signUp = require("./controllers/signUp");
 const login = require("./controllers/login");
 const getRole = require("./controllers/getRole");
+const adminRoute = require("./routes/adminRoute");
 
 //middlewares
 // Allow requests from specific origin and support credentials
@@ -28,6 +29,7 @@ mongoose
   .connect(uri)
   .then(() => {
     // protected routes
+    app.use("/admin", adminRoute);
     app.use("/member", memberRoute);
     app.use("/mco", mcoRoute);
 

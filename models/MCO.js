@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
+const { Schema } = mongoose;
 
-const userSchema = new mongoose.Schema({
+const MCO = new Schema({
   firstName: {
     type: String,
     required: [true, "First name is required"],
@@ -16,19 +17,20 @@ const userSchema = new mongoose.Schema({
   email: {
     type: String,
     required: [true, "Email is required"],
-    unique: [true, "Email already exists"],
+    unique: true,
     match: [/.+\@.+\..+/, "Email is not valid"],
-  },
-  password: {
-    type: String,
-    required: [true, "Password is required"],
   },
   role: {
     type: String,
-    enum: ["admin", "mco", "member"],
-    required: [true, "Role is required"],
+    // enum: ["admin", "mco", "member"],
+    default: "member",
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now,
   },
 });
 
-const User = mongoose.model("user", userSchema);
-module.exports = User;
+const MCORegistration = mongoose.model("MCO", MCO);
+
+module.exports = MCORegistration;
