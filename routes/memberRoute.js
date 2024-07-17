@@ -7,6 +7,7 @@ const getStudentById = require("../controllers/getStudentById");
 const myStudents = require("../controllers/myStudents");
 const getEnrolledStudents = require("../controllers/getEnrolledStudents");
 const getEnrolledStudentsCount = require("../controllers/getEnrolledStudentsCount");
+const getTotalMoney = require("../controllers/getTotalMoney");
 
 //routes
 memberRoute.get("/", authorizeRole(["member"]), async (req, res) => {
@@ -48,5 +49,13 @@ memberRoute.get(
 
 //get enrolled student count
 memberRoute.get("/enrolled-count", authUser, getEnrolledStudentsCount);
+
+//get total money for a member
+memberRoute.get(
+  "/total-money/:memberEmail",
+  authUser,
+  authorizeRole(["member", "mco"]),
+  getTotalMoney
+);
 
 module.exports = memberRoute;
