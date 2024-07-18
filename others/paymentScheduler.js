@@ -19,6 +19,16 @@ const scheduleJob = (studentId, delay) => {
             let money = 300;
             const member = await Member.findOne({ email: student.createdBy });
             if (!member) console.log("member not found");
+
+            // Check if student is already in enrolledStudents array
+            const isStudentAlreadyEnrolled = member.enrolledStudents.includes(
+              student._id
+            );
+            if (isStudentAlreadyEnrolled) {
+              console.log("Student is already enrolled");
+              return;
+            }
+
             //if enrolled student count is greater than 4
             if (member.enrolledStudents.length >= 4) {
               money = 400;
