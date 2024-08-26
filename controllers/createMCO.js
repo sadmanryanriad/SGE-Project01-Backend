@@ -5,6 +5,10 @@ const admin = require("../others/firebaseService"); // Import the initialized Fi
 
 const MCORegistration = async (req, res) => {
   const { firstName, lastName, email, password } = req.body;
+  // Validate required fields
+  if (!firstName || !lastName || !email || !password) {
+    return res.status(400).json({ message: "Missing required fields" });
+  }
 
   try {
     // First, create the Firebase account

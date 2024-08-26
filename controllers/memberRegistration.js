@@ -13,6 +13,11 @@ const memberRegistration = async (req, res) => {
     whatsappNumber,
   } = req.body;
 
+  // Validate required fields
+  if (!firstName || !lastName || !email || !password || !primaryMobileNumber) {
+    return res.status(400).json({ message: "Missing required fields" });
+  }
+
   try {
     // First, create the Firebase account
     const firebaseUser = await admin.auth().createUser({
