@@ -7,9 +7,18 @@ const getAllMCO = require("../controllers/getAllMCO");
 const assignStudentToMCO = require("../controllers/assignStudentToMCO");
 const getAllMember = require("../controllers/getAllMember");
 const getMemberByEmail = require("../controllers/getMemberByEmail");
+const createAdmin = require("../controllers/createAdmin");
 
 adminRoute.get("/", authUser, authorizeRole(["admin"]), async (req, res) =>
   res.json("admin home")
+);
+
+//create new admin
+adminRoute.post(
+  "/create-admin",
+  authUser,
+  authorizeRole(["admin"]),
+  createAdmin
 );
 
 //get all student

@@ -1,12 +1,11 @@
-const MCO = require("../models/MCO");
+const Admin = require("../models/Admin");
 const { saveUser } = require("./userController");
 const sendEmail = require("../others/sendEmail");
 const admin = require("../others/firebaseService"); // Import the initialized Firebase Admin SDK
 
-const MCORegistration = async (req, res) => {
-  const { firstName, lastName, email, password } = req.body;
-
+const createAdmin = async (req, res) => {
   try {
+    const { firstName, lastName, email, password } = req.body;
     // First, create the Firebase account
     const firebaseUser = await admin.auth().createUser({
       email,
@@ -20,27 +19,27 @@ const MCORegistration = async (req, res) => {
       lastName,
       email,
       password, // omit or hash the password before saving it to MongoDB pore korbo
-      role: "mco",
+      role: "admin",
       firebaseUid: firebaseUser.uid, // Save the Firebase UID for reference
     };
     const savedUser = await saveUser(user);
 
-    // Save MCO data to MongoDB
-    const newMCO = new MCO({
+    // Save Admin data to MongoDB
+    const newAdmin = new Admin({
       firstName,
       lastName,
       email,
     });
-    const savedMCO = await newMCO.save();
+    const savedAdmin = await newAdmin.save();
 
-    if (!savedMCO) {
-      // If saving MCO data fails, delete the Firebase user to maintain consistency
+    // If saving Admin data fails, delete the Firebase user to maintain consistency
+    if (!savedAdmin) {
       await admin.auth().deleteUser(firebaseUser.uid);
       return res.status(500).json("Internal server error");
     }
 
     res.status(201).json({
-      message: "MCO registered successfully",
+      message: "Admin registered successfully",
       user: {
         name: `${firstName} ${lastName}`,
         email: savedUser.email,
@@ -52,7 +51,7 @@ const MCORegistration = async (req, res) => {
     const emailSubject = "Welcome to Shabuj Global Education";
     const emailText =
       `Dear ${firstName} ${lastName},\n\n` +
-      `You are now a MCO.\n\n` +
+      `You are now an Admin.\n\n` +
       `You can log in to your account.\n\n`;
     sendEmail(email, emailSubject, emailText).catch(console.error);
   } catch (error) {
@@ -84,4 +83,4 @@ const MCORegistration = async (req, res) => {
   }
 };
 
-module.exports = MCORegistration;
+module.exports = createAdmin;
