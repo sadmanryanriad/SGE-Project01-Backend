@@ -28,6 +28,9 @@ const userSchema = new mongoose.Schema({
     enum: ["admin", "mco", "member"],
     required: [true, "Role is required"],
   },
+  firebaseUid: {
+    type: String,
+  },
 });
 
 const User = mongoose.model("user", userSchema);
