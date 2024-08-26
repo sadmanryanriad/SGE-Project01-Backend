@@ -22,7 +22,7 @@ const memberRegistrationSchema = new Schema({
   },
   primaryMobileNumber: {
     type: Number,
-    // required: [true, "Please enter primary mobile number"],
+    required: [true, "Please enter primary mobile number"],
     minlength: [10, "Primary mobile number must be at least 10 digits"],
   },
   whatsappNumber: {
