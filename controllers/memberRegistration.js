@@ -1,25 +1,35 @@
 const MemberSchema = require("../models/member");
 const { saveUser } = require("./userController");
 const sendEmail = require("../others/sendEmail");
+const admin = require("../others/firebaseService"); // Import the initialized Firebase Admin SDK
 
 const memberRegistration = async (req, res) => {
   const {
     firstName,
     lastName,
     email,
+    password,
     primaryMobileNumber,
     whatsappNumber,
-    password,
   } = req.body;
 
   try {
-    // Save user data first
+    // First, create the Firebase account
+    const firebaseUser = await admin.auth().createUser({
+      email,
+      password,
+      displayName: `${firstName} ${lastName}`,
+    });
+    console.log(firebaseUser);
+
+    // Save user data
     const user = {
       firstName,
       lastName,
       email,
-      password,
+      password, // omit or hash the password before saving it to MongoDB pore korbo
       role: "member",
+      firebaseUid: firebaseUser.uid, // Save the Firebase UID for reference
     };
     const savedUser = await saveUser(user);
 
@@ -33,6 +43,12 @@ const memberRegistration = async (req, res) => {
       password,
     });
     const savedMember = await newMember.save();
+
+    if (!savedMember) {
+      // If saving MCO data fails, delete the Firebase user to maintain consistency
+      await admin.auth().deleteUser(firebaseUser.uid);
+      return res.status(500).json("Internal server error");
+    }
 
     res.status(201).json({
       message: "Member registered successfully",
