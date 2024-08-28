@@ -9,6 +9,7 @@ const getAllMember = require("../controllers/getAllMember");
 const getMemberByEmail = require("../controllers/getMemberByEmail");
 const createAdmin = require("../controllers/createAdmin");
 const getMemberStudentsByEmail = require("../controllers/getMemberStudentsByEmail");
+const getAllAdmins = require("../controllers/getAllAdmins");
 
 adminRoute.get("/", authUser, authorizeRole(["admin"]), async (req, res) =>
   res.json("admin home")
@@ -20,6 +21,14 @@ adminRoute.post(
   authUser,
   authorizeRole(["admin"]),
   createAdmin
+);
+
+//get all admins
+adminRoute.get(
+  "/get-all-admins",
+  authUser,
+  authorizeRole(["admin"]),
+  getAllAdmins
 );
 
 //get all student
