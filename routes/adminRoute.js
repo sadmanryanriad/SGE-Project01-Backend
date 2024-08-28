@@ -8,6 +8,7 @@ const assignStudentToMCO = require("../controllers/assignStudentToMCO");
 const getAllMember = require("../controllers/getAllMember");
 const getMemberByEmail = require("../controllers/getMemberByEmail");
 const createAdmin = require("../controllers/createAdmin");
+const getMemberStudentsByEmail = require("../controllers/getMemberStudentsByEmail");
 
 adminRoute.get("/", authUser, authorizeRole(["admin"]), async (req, res) =>
   res.json("admin home")
@@ -52,6 +53,14 @@ adminRoute.get(
   authUser,
   authorizeRole(["admin"]),
   getMemberByEmail
+);
+
+//get member's students
+adminRoute.get(
+  "/member-students/:memberEmail",
+  authUser,
+  authorizeRole(["admin"]),
+  getMemberStudentsByEmail
 );
 
 module.exports = adminRoute;
