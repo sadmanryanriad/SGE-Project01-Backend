@@ -22,5 +22,8 @@
     "node-cron": "^3.0.3",
     "nodemailer": "^6.9.14",
     "streamifier": "^0.1.1"
+  },
+  "engines": {
+    "node": ">=16.0.0"
   }
 }
