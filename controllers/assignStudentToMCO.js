@@ -43,15 +43,17 @@ const assignStudentToMCO = async (req, res) => {
       console.log("Member not found");
       return;
     }
-    const emailSubject = `Student Assigned to MCO`;
-    const emailTextStudent = `Dear ${result.firstName},\n\nYou have been assigned to an MCO: ${MCOname}.\n\n MCO email: ${assignedTo} \n\nBest regards,\nYour Team`;
-    const emailTextMember = `Dear ${member.firstName},\n\nYour student ${result.firstName} has been assigned to an MCO: ${MCOname}.\n\n MCO email: ${assignedTo} \n\nBest regards,\nYour Team`;
+    const emailSubject = `Student Assigned to a MCO`;
+    const emailTextStudent = `Dear ${result.firstName} ${result.lastName},\n\nYou have been assigned to an MCO: ${MCOname}.\n\n MCO email: ${assignedTo} \n\nBest regards,\nYour Team`;
+    const emailTextMember = `Dear ${member.firstName} ${member.lastName},\n\nYour student ${result.firstName} ${result.lastName} has been assigned to an MCO: ${MCOname}.\n\n MCO email: ${assignedTo} \n\nBest regards,\nYour Team`;
+    const emailTextMCO = `Dear ${MCOname},\n\nYou have been assigned a new student: ${result.firstName} ${result.lastName}.\n\n student email: ${result.email}\n\nPreffered University: ${result.preferredUniversity}\n\nPreffered Course: ${result.preferredCourse} \n\nBest regards,\nYour Team`;
 
     // Send email notifications asynchronously
     sendEmail(result.email, emailSubject, emailTextStudent).catch(
       console.error
     );
     sendEmail(member.email, emailSubject, emailTextMember).catch(console.error);
+    sendEmail(mco.email, emailSubject, emailTextMCO).catch(console.error);
   } catch (error) {
     console.log(error);
     res.status(500).json("Internal Server Error ");
